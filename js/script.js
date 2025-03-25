@@ -4,7 +4,11 @@ const questionSpan = document.getElementById('question');
 const answerSpan = document.getElementById('answer');
 const status = document.getElementById('status');
 
-if (!startBtn) console.error('Start button not found');
+if (!startBtn) {
+  console.error('Start button not found');
+  status.textContent = 'Error: Start button not found in HTML.';
+  return;
+}
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (!SpeechRecognition) {
@@ -18,7 +22,10 @@ recognition.continuous = true;
 recognition.interimResults = false;
 recognition.lang = 'en-US';
 
-recognition.onstart = () => console.log('Speech recognition started');
+recognition.onstart = () => {
+  console.log('Speech recognition started');
+  status.textContent = 'Listening...';
+};
 recognition.onresult = async (event) => {
   console.log('Speech detected');
   const question = event.results[event.results.length - 1][0].transcript;
@@ -55,7 +62,6 @@ startBtn.addEventListener('click', () => {
   console.log('Start button clicked');
   try {
     recognition.start();
-    status.textContent = 'Listening...';
     startBtn.disabled = true;
     stopBtn.disabled = false;
   } catch (error) {
