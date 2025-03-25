@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Interview</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    textarea { width: 100%; max-width: 600px; height: 200px; }
+    button { margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>Live Interview in VS Code</h1>
+  <textarea id="code" placeholder="Write your code here..."></textarea>
+  <br>
+  <button onclick="requestHint()">Get Hint</button>
+  <p id="hint"></p>
+
+  <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+  <script>
+    const socket = io('https://your-repl-name.your-username.repl.co'); // Replace with your Replit URL
+    const codeArea = document.getElementById('code');
+    const hintArea = document.getElementById('hint');
+
+    socket.on('code-update', (code) => {
+      codeArea.value = code;
+    });
+
+    socket.on('hint', (hint) => {
+      hintArea.textContent = 'Hint: ' + hint;
+    });
+
+    codeArea.addEventListener('input', () => {
+      socket.emit('code-update', codeArea.value);
+    });
+
+    function requestHint() {
+      socket.emit('request-hint');
+    }
+  </script>
+</body>
+</html>
